@@ -4,11 +4,9 @@
 #include <cstdint>
 #include <tcl.h>
 
-
 #include <visa.h>
 
 #define NS_PREFIX "rsvisa::"                       /* Tcl namespace prefix for command definitions */
-
 
 #define STATUS_TXT_LEN 100
 
