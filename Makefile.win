@@ -3,7 +3,7 @@ CC = gcc
 
 CCFLAGS = -g -O3 -w
 SHARED_FLAG = -fPIC -shared
-PROJECT = tclrsvisa.dll
+PROJECT = rsvisa.dll
 
 # Include and library paths to the Tcl interpreter
 # We use includes from the compiled interpreter
@@ -18,8 +18,8 @@ RSVISA_LIB = -L"./rsvisa" -lRsVisa32
 
 all : $(PROJECT)
 
-$(PROJECT) : tclrsvisa.cpp
-	$(CC) tclrsvisa.cpp ${CCFLAGS} ${SHARED_FLAG} -o $(PROJECT) $(TCL_INC) $(RSVISA_INC) $(TCL_LIB) $(RSVISA_LIB)
+$(PROJECT) : rsvisa.cpp
+	$(CC) rsvisa.cpp ${CCFLAGS} ${SHARED_FLAG} -o $(PROJECT) $(TCL_INC) $(RSVISA_INC) $(TCL_LIB) $(RSVISA_LIB)
 
 clean:
 	rm -rf *.o *.a *.dll
