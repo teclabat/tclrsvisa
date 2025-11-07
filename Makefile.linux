@@ -1,0 +1,26 @@
+# GNU C compiler
+CC = gcc
+
+CCFLAGS = -g -O3 -w
+SHARED_FLAG = -fPIC -shared
+PROJECT = tclrsvisa.so
+
+# Include and library paths to the Tcl interpreter
+# We use includes from the compiled interpreter
+TCL_INC = -I$(INSTALLDIR)/include
+TCL_LIB = -L$(INSTALLDIR)/lib -ltcl8.6
+
+# Include and library paths for the Rohde+Schwarz VISA library
+RSVISA_INC = -I/usr/include/rsvisa
+RSVISA_LIB = -lrsvisa
+
+.PHONY : all clean
+
+all : $(PROJECT)
+
+$(PROJECT) : tclrsvisa.cpp
+	$(CC) tclrsvisa.cpp ${CCFLAGS} ${SHARED_FLAG} -o $(PROJECT) $(TCL_INC) $(RSVISA_INC) $(TCL_LIB) $(RSVISA_LIB)
+
+clean:
+	rm -rf *.o *.a *.so
+
