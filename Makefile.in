@@ -151,8 +151,6 @@ PKG_CFLAGS	= @PKG_CFLAGS@
 
 # Original DEFS from configure with stubs
 DEFS_WITH_STUBS = @DEFS@ $(PKG_CFLAGS)
-# Remove stubs defines for direct Tcl linking (C++ requirement)
-DEFS		= $(filter-out -DUSE_TCL_STUBS=1 -DUSE_TCLOO_STUBS=1,$(DEFS_WITH_STUBS))
 
 # Move pkgIndex.tcl to 'BINARIES' var if it is generated in the Makefile
 CONFIG_CLEAN_FILES = Makefile pkgIndex.tcl
