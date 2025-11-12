@@ -13,8 +13,8 @@
 // Forward declarations for command functions using modern Tcl object API
 extern "C" {
   // Package initialization and unload
-  int Rsvisa_Init(Tcl_Interp *Interp);
-  int Rsvisa_Unload(Tcl_Interp *Interp, int flags);
+  int Rsvisa_Init(Tcl_Interp *interp);
+  int Rsvisa_Unload(Tcl_Interp *interp, int flags);
 
   // Command implementations
   int GetResourceManager(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[]);
@@ -509,26 +509,26 @@ int GetTimeout(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CON
 
 
 
-int Rsvisa_Init(Tcl_Interp *Interp) {
+int Rsvisa_Init(Tcl_Interp *interp) {
   // create namespace
-  if (Tcl_CreateNamespace(Interp, NS_PREFIX, NULL, NULL) == NULL) {
+  if (Tcl_CreateNamespace(interp, NS_PREFIX, NULL, NULL) == NULL) {
     return TCL_ERROR;
   }
 
   // Register commands using modern Tcl_CreateObjCommand
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "GetResourceManager", GetResourceManager, NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "OpenResource",       OpenResource,       NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "CloseResource",      CloseResource,      NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "Idn",                Idn,                NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "Stb",                Stb,                NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "WriteRead",          WriteRead,          NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "WriteReadBin",       WriteReadBin,       NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "Write",              Write,              NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "Read",               Read,               NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "SetAttribute",       SetAttribute,       NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "GetAttribute",       GetAttribute,       NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "SetTimeout",         SetTimeout,         NULL, NULL);
-  Tcl_CreateObjCommand(Interp, NS_PREFIX "GetTimeout",         GetTimeout,         NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "GetResourceManager", GetResourceManager, NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "OpenResource",       OpenResource,       NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "CloseResource",      CloseResource,      NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "Idn",                Idn,                NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "Stb",                Stb,                NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "WriteRead",          WriteRead,          NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "WriteReadBin",       WriteReadBin,       NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "Write",              Write,              NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "Read",               Read,               NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "SetAttribute",       SetAttribute,       NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "GetAttribute",       GetAttribute,       NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "SetTimeout",         SetTimeout,         NULL, NULL);
+  Tcl_CreateObjCommand(interp, NS_PREFIX "GetTimeout",         GetTimeout,         NULL, NULL);
 
   // provide package
   if (Tcl_PkgProvide(interp, PACKAGE_NAME, PACKAGE_VERSION) != TCL_OK) {
@@ -538,7 +538,7 @@ int Rsvisa_Init(Tcl_Interp *Interp) {
   return TCL_OK;
 }
 
-int Rsvisa_Unload(Tcl_Interp *Interp, int flags) {
+int Rsvisa_Unload(Tcl_Interp *interp, int flags) {
   // destroy operation.
   return TCL_OK;
 }
