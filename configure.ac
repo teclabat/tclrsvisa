@@ -175,14 +175,14 @@ TEA_ENABLE_SYMBOLS
 TEA_MAKE_LIB
 
 #-----------------------------------------------------------------------
-# For C++ extensions, we need to link directly to the Tcl library
-# rather than using stubs. This is because C++ static initialization
-# doesn't work properly with stubs.
+# Link to the Tcl stubs library.
+# The code uses Tcl_InitStubs, so we must link against libtclstub86.a
+# instead of the full Tcl library.
 #-----------------------------------------------------------------------
 
 if test "${TEA_PLATFORM}" = "windows" ; then
-    # On Windows, link directly to libtcl86.dll.a instead of stubs
-    TCL_LIB_FILE="libtcl86.dll.a"
+    # On Windows, link to Tcl stubs library since we use Tcl_InitStubs
+    TCL_LIB_FILE="libtclstub86.a"
     TCL_LIB_PATH="${TCL_BIN_DIR}/${TCL_LIB_FILE}"
     SHLIB_LD_LIBS="\${LIBS} \"`\${CYGPATH} \${TCL_LIB_PATH}`\" -static-libgcc -static-libstdc++"
     # Remove -static flag from LDFLAGS to allow dynamic linking to Tcl
