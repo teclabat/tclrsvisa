@@ -1,13 +1,13 @@
+#ifdef HAVE_CONFIG_H
+#include "../config.h"
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <cstdint>
 #include <tcl.h>
-
 #include <visa.h>
-
-#define NS_PREFIX "rsvisa::"                       /* Tcl namespace prefix for command definitions */
-
+#define NS_PREFIX PACKAGE_NAME"::"
 #define STATUS_TXT_LEN 100
 
 // Forward declarations for command functions using modern Tcl object API
@@ -531,7 +531,7 @@ int Rsvisa_Init(Tcl_Interp *Interp) {
   Tcl_CreateObjCommand(Interp, NS_PREFIX "GetTimeout",         GetTimeout,         NULL, NULL);
 
   // provide package
-  if (Tcl_PkgProvide(Interp, "rsvisa", "1.0.0") == TCL_ERROR) {
+  if (Tcl_PkgProvide(interp, PACKAGE_NAME, PACKAGE_VERSION) != TCL_OK) {
     return TCL_ERROR;
   }
 

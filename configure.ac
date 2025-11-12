@@ -27,7 +27,10 @@ TEA_INIT_CXX([11])
 
 AC_CONFIG_AUX_DIR(tclconfig)
 
-#-----------------------------------------------------------------------
+# Generate config.h header file for configuration results
+AC_CONFIG_HEADERS([config.h])
+
+#--------------------------------------------------------------------
 # Load the tclConfig.sh file
 #-----------------------------------------------------------------------
 
@@ -62,7 +65,7 @@ TEA_SETUP_COMPILER
 # that are involved in the build.
 #-----------------------------------------------------------------------
 
-TEA_ADD_SOURCES([rsvisa.cpp])
+TEA_ADD_SOURCES([generic/rsvisa.cpp])
 TEA_ADD_HEADERS([])
 TEA_ADD_INCLUDES([])
 TEA_ADD_LIBS([])
