@@ -1,10 +1,9 @@
-*~
-
 # TEA build artifacts
 configure
 config.status
 config.log
 config.cache
+config.h
 autom4te.cache/
 Makefile
 pkgIndex.tcl
@@ -22,11 +21,11 @@ pkgIndex.tcl
 *.pdb
 
 # Backup files
+*~
 *.old
 *.bak
 
 # Editor files
-.vscode/
-.idea/
 *.swp
 .gse
+.origin

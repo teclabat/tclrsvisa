@@ -68,7 +68,14 @@ TEA_SETUP_COMPILER
 TEA_ADD_SOURCES([generic/rsvisa.cpp])
 TEA_ADD_HEADERS([])
 TEA_ADD_INCLUDES([])
-TEA_ADD_LIBS([])
+## Windows and Linux do have different R&S libs to include
+if test "${TEA_PLATFORM}" = "windows" ; then
+    ## Windows
+    TEA_ADD_LIBS([-lRsVisa32])
+else
+    ## Linux
+    TEA_ADD_LIBS([-lrsvisa])
+fi
 TEA_ADD_CFLAGS([])
 TEA_ADD_STUB_SOURCES([])
 TEA_ADD_TCL_SOURCES([])
@@ -87,38 +94,6 @@ TEA_PUBLIC_TCL_HEADERS
 #TEA_PUBLIC_TK_HEADERS
 #TEA_PRIVATE_TK_HEADERS
 #TEA_PATH_X
-
-#-----------------------------------------------------------------------
-# VISA library configuration
-#-----------------------------------------------------------------------
-
-AC_ARG_WITH([rsvisa],
-    [AS_HELP_STRING([--with-rsvisa=DIR],
-        [location of Rohde & Schwarz VISA library])],
-    [rsvisa_dir=$withval],
-    [rsvisa_dir=""])
-
-# If no path specified, use default ./rsvisa directory
-if test "x$rsvisa_dir" = "x"; then
-    rsvisa_dir="\${srcdir}/rsvisa"
-fi
-
-# Add VISA include path
-TEA_ADD_INCLUDES([-I${rsvisa_dir}])
-
-# Platform-specific VISA library configuration
-if test "${TEA_PLATFORM}" = "windows" ; then
-    # Windows: Link directly to .lib import library (full path, no -l prefix)
-    # We'll add this to PKG_LIBS directly instead of using TEA_ADD_LIBS
-    # to avoid the -l prefix being added
-    PKG_LIBS="${PKG_LIBS} \"`\${CYGPATH} ${rsvisa_dir}/RsVisa32.lib`\""
-    RSVISA_LIB_PATH="${rsvisa_dir}/RsVisa32.lib"
-else
-    # Linux/Unix: Use system library
-    TEA_ADD_LIBS([-lrsvisa])
-    RSVISA_LIB_PATH=""
-fi
-AC_SUBST(RSVISA_LIB_PATH)
 
 #-----------------------------------------------------------------------
 # A few miscellaneous platform-specific items:
