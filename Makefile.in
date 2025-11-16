@@ -93,7 +93,6 @@ CFLAGS_WARNING	= @CFLAGS_WARNING@
 CFLAGS		= @CFLAGS@
 CPPFLAGS	= @CPPFLAGS@
 CXXFLAGS	= @CXXFLAGS@
-CLEANFILES	= @CLEANFILES@
 EXEEXT		= @EXEEXT@
 LDFLAGS_DEFAULT	= @LDFLAGS_DEFAULT@
 LDFLAGS		= @LDFLAGS@
@@ -171,32 +170,13 @@ CXXCOMPILE	= $(CXX) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) 
 
 binaries: $(BINARIES)
 
-libraries:
-
 #========================================================================
 # Your doc target should differentiate from doc builds (by the developer)
 # and doc installs (see install-doc), which just install the docs on the
 # end user machine when building from source.
 #========================================================================
 
-doc:
-
-install: all install-binaries install-libraries install-doc
-
-install-binaries: binaries install-lib-binaries install-bin-binaries
-
-#========================================================================
-# This rule installs platform-independent files, such as header files.
-# The list=...; for p in $$list handles the empty list case x-platform.
-#========================================================================
-
-install-libraries: libraries
-	@$(INSTALL_DATA_DIR) "$(DESTDIR)$(includedir)"
-	@echo "Installing header files in $(DESTDIR)$(includedir)"
-	@list='$(PKG_HEADERS)'; for i in $$list; do \
-	    echo "Installing $(srcdir)/$$i" ; \
-	    $(INSTALL_DATA) $(srcdir)/$$i "$(DESTDIR)$(includedir)" ; \
-	done;
+install: binaries install-bin-binaries install-lib-binaries install-doc
 
 #========================================================================
 # Install documentation.  Unix manpages should go in the $(mandir)
@@ -214,16 +194,8 @@ install-doc: doc
 	    fi; \
 	done
 
-test: binaries libraries
+test: binaries install-bin-binaries install-lib-binaries
 	$(INSTALLED_TCLSH) `@CYGPATH@ $(srcdir)/tests/all.tcl` $(TESTFLAGS)
-
-shell: binaries libraries
-	@$(TCLSH_ENV) $(TCLSH_PROG) $(SCRIPT)
-
-gdb:
-	$(TCLSH_ENV) gdb $(TCLSH_PROG) $(SCRIPT)
-
-depend:
 
 #========================================================================
 # $(PKG_LIB_FILE) should be listed as part of the BINARIES variable
@@ -277,19 +249,14 @@ DIST_DIR	= $(DIST_ROOT)/$(PACKAGE_NAME)$(PACKAGE_VERSION)
 # End of user-definable section
 #========================================================================
 
-#========================================================================
-# Don't modify the file to clean here.  Instead, set the "CLEANFILES"
-# variable in configure.ac
-#========================================================================
-
 clean:
 	-test -z "$(BINARIES)" || rm -f $(BINARIES)
-	-rm -f *.$(OBJEXT) core *.core
-	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	-rm -f *.$(OBJEXT)
 
 distclean: clean
 	-rm -f Makefile pkgIndex.tcl configure
-	-rm -f config.cache config.log config.status
+	-rm -f config.h config.cache config.log config.status
+	-rm -rf autom4te.cache
 
 #========================================================================
 # Install binary object libraries.  On Windows this includes both .dll and
@@ -321,12 +288,12 @@ install-lib-binaries: binaries
 	@list='$(PKG_TCL_SOURCES)'; for p in $$list; do \
 	  if test -f $(srcdir)/$$p; then \
 	    destp=`basename $$p`; \
-	    echo " Install $$destp $(DESTDIR)$(pkglibdir)/$$destp"; \
+	    echo "Install $$destp $(DESTDIR)$(pkglibdir)/$$destp"; \
 	    $(INSTALL_DATA) $(srcdir)/$$p "$(DESTDIR)$(pkglibdir)/$$destp"; \
 	  fi; \
 	done
 	@if test "x$(SHARED_BUILD)" = "x1"; then \
-	    echo " Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"; \
+	    echo "Install pkgIndex.tcl $(DESTDIR)$(pkglibdir)"; \
 	    $(INSTALL_DATA) pkgIndex.tcl "$(DESTDIR)$(pkglibdir)"; \
 	fi
 
@@ -350,24 +317,8 @@ install-bin-binaries: binaries
 
 .SUFFIXES: .c .cpp .$(OBJEXT)
 
-Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-uninstall-binaries:
-	list='$(lib_BINARIES)'; for p in $$list; do \
-	  rm -f "$(DESTDIR)$(pkglibdir)/$$p"; \
-	done
-	list='$(PKG_TCL_SOURCES)'; for p in $$list; do \
-	  p=`basename $$p`; \
-	  rm -f "$(DESTDIR)$(pkglibdir)/$$p"; \
-	done
-	list='$(bin_BINARIES)'; for p in $$list; do \
-	  rm -f "$(DESTDIR)$(bindir)/$$p"; \
-	done
-
 .PHONY: all binaries clean depend distclean doc install libraries test
-.PHONY: install-binaries install-libraries install-doc
+.PHONY: install-binaries  install-doc
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
