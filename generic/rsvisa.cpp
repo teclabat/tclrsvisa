@@ -4,7 +4,7 @@
 #include <string.h>
 #include <cstdint>
 #include <tcl.h>
-#include <visa.h>
+#include <rsvisa/visa.h>
 #define NS_PREFIX PACKAGE_NAME"::"
 #define STATUS_TXT_LEN 100
 
